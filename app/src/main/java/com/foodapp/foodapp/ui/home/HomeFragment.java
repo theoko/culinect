@@ -43,6 +43,11 @@ public class HomeFragment extends Fragment {
             R.mipmap.ic_salmon_dish,
             R.mipmap.ic_salmon_dish,
             R.mipmap.ic_salmon_dish,
+            R.mipmap.ic_salmon_dish,
+            R.mipmap.ic_salmon_dish,
+            R.mipmap.ic_salmon_dish,
+            R.mipmap.ic_salmon_dish,
+            R.mipmap.ic_salmon_dish,
             R.mipmap.ic_salmon_dish
     };
     private String[] myImageNameList = new String[] {
@@ -52,7 +57,12 @@ public class HomeFragment extends Fragment {
             "tacos",
             "salmon",
             "pancakes",
-            "tacos"
+            "tacos",
+            "salmon",
+            "pancakes",
+            "tacos",
+            "salmon",
+            "pancakes"
     };
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -70,6 +80,7 @@ public class HomeFragment extends Fragment {
         nearbyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
         groupsRecyclerView = root.findViewById(R.id.group_recycler);
+        groupsRecyclerView.setNestedScrollingEnabled(true);
         groupItemModelArrayList = groups();
         groupsAdapter = new GroupsAdapter(getActivity(), groupItemModelArrayList);
         groupsRecyclerView.setAdapter(groupsAdapter);
@@ -88,7 +99,7 @@ public class HomeFragment extends Fragment {
 
         ArrayList<FoodItemModel> list = new ArrayList<>();
 
-        for(int i = 0; i < 7; i++){
+        for(int i = 0; i < 12; i++){
             FoodItemModel foodItemModel = new FoodItemModel();
             foodItemModel.setName(myImageNameList[i]);
             foodItemModel.setImage_drawable(myImageList[i]);
@@ -102,7 +113,7 @@ public class HomeFragment extends Fragment {
 
         ArrayList<GroupItemModel> list = new ArrayList<>();
 
-        for(int i = 0; i < 7; i++){
+        for(int i = 0; i < 12; i++){
             GroupItemModel groupItemModel = new GroupItemModel();
             groupItemModel.setName(myImageNameList[i]);
             groupItemModel.setImage_drawable(myImageList[i]);

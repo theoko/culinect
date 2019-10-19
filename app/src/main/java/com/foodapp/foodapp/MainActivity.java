@@ -3,7 +3,9 @@ package com.foodapp.foodapp;
 import android.app.SearchManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        getSupportActionBar().setTitle("Culinect");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimaryDark));
     }
 
     @Override
@@ -73,5 +78,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+    }
+
+    public void onClick_review(View view) {
+        Log.d(getClass().getName(), "Clicked on review!");
     }
 }
