@@ -1,6 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="40sp"
+    android:gravity="center|top">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher_background" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jessie Li"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:layout_marginTop="25sp"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Providence, RI"
+                android:textSize="16sp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/action_my_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="50sp"
+                android:textSize="19sp"
+                android:gravity="center"
+                android:text="my account" />
+
+            <TextView
+                android:id="@+id/action_reviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="19sp"
+                android:layout_marginTop="18sp"
+                android:gravity="center"
+                android:text="reviews" />
+
+            <TextView
+                android:id="@+id/action_groups"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="19sp"
+                android:layout_marginTop="18sp"
+                android:gravity="center"
+                android:text="groups" />
+
+            <TextView
+                android:id="@+id/action_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="19sp"
+                android:layout_marginTop="18sp"
+                android:gravity="center"
+                android:text="settings" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
