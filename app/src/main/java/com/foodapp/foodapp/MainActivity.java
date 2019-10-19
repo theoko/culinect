@@ -1,5 +1,7 @@
 package com.foodapp.foodapp;
 
+import android.app.SearchManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.foodapp.foodapp.adapters.NearbyAdapter;
@@ -9,6 +11,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -54,6 +58,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            searchView.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+        } else {
+            searchView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 
