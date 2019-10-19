@@ -1,4 +1,4 @@
-package com.foodapp.foodapp.ui.send;
+package com.foodapp.foodapp.ui.groups;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

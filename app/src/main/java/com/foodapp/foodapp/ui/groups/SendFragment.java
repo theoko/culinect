@@ -1,4 +1,4 @@
-package com.foodapp.foodapp.ui.send;
+package com.foodapp.foodapp.ui.groups;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

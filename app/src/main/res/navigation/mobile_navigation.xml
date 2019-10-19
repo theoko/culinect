@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.foodapp.foodapp.ui.gallery.GalleryFragment"
+        android:name="com.foodapp.foodapp.ui.reviews.GalleryFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.foodapp.foodapp.ui.slideshow.SlideshowFragment"
+        android:name="com.foodapp.foodapp.ui.account.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
 
@@ -31,13 +31,13 @@
 
     <fragment
         android:id="@+id/nav_share"
-        android:name="com.foodapp.foodapp.ui.share.ShareFragment"
+        android:name="com.foodapp.foodapp.ui.settings.ShareFragment"
         android:label="@string/menu_share"
         tools:layout="@layout/fragment_share" />
 
     <fragment
         android:id="@+id/nav_send"
-        android:name="com.foodapp.foodapp.ui.send.SendFragment"
+        android:name="com.foodapp.foodapp.ui.groups.SendFragment"
         android:label="@string/menu_send"
         tools:layout="@layout/fragment_send" />
 </navigation>
