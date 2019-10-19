@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "883581729094",
+    "firebase_url": "https://culinect-2b5b5.firebaseio.com",
+    "project_id": "culinect-2b5b5",
+    "storage_bucket": "culinect-2b5b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883581729094:android:a1ab6f40b93ef72b2f0d47",
+        "android_client_info": {
+          "package_name": "com.foodapp.foodapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883581729094-doa2p32q3uv6vq7ikskt3cfu8hkktvu1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLc5kif_kIPQrDsxDnSDjD3g1RVxdVL-M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883581729094-doa2p32q3uv6vq7ikskt3cfu8hkktvu1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
