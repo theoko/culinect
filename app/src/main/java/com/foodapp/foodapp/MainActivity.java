@@ -19,14 +19,18 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.foodapp.foodapp.ui.auth.login.ui.login.LoginActivity;
+import com.foodapp.foodapp.ui.home.HomeFragment;
+import com.foodapp.foodapp.ui.reviews.GalleryFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,9 +41,17 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
+    private String TAG_FRAGMENT = "mainFragment";
     private AppBarConfiguration mAppBarConfiguration;
     private TextView userDisplayName;
     private TextView localityTxt;
+
+    // Navigation links
+    private TextView action_feed;
+    private TextView action_reviews;
+    private TextView action_groups;
+    private TextView action_settings;
+    private TextView action_logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +59,56 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         userDisplayName = navigationView.findViewById(R.id.userDisplayName);
         localityTxt = navigationView.findViewById(R.id.localityTxt);
+
+        // Links
+        action_feed = navigationView.findViewById(R.id.action_feed);
+        action_feed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START);
+                Fragment feedFragment = new HomeFragment();
+                fragmentTransition(feedFragment);
+            }
+        });
+
+        action_reviews = navigationView.findViewById(R.id.action_reviews);
+        action_reviews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START);
+                Fragment reviewsFragment = new GalleryFragment();
+                fragmentTransition(reviewsFragment);
+            }
+        });
+
+        action_groups = navigationView.findViewById(R.id.action_groups);
+        action_groups.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        action_settings = navigationView.findViewById(R.id.action_settings);
+        action_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        action_logout = navigationView.findViewById(R.id.action_logout);
+        action_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -69,6 +127,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         checkAuth();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateLocation();
+    }
+
     private void checkAuth() {
         // Check if user has already signed in
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -83,12 +147,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             String email = user.getEmail();
             userDisplayName.setText(email);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateLocation();
     }
 
     private void updateLocation() {
@@ -122,6 +180,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void fragmentTransition(Fragment someFragment) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT);
+        androidx.fragment.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.nav_host_fragment, someFragment); // give your fragment container id in first parameter
+        fragmentTransaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+        fragmentTransaction.remove(fragment).commit();
     }
 
     @Override
