@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/dish" />
 
     <Button
-        android:id="@+id/upload"
+        android:id="@+id/uploadBtn"
         android:layout_width="156dp"
         android:layout_height="wrap_content"
         android:background="@color/colorYellow"
@@ -81,7 +81,7 @@
         android:layout_marginEnd="32dp"
         android:text="Photos"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/upload"
+        app:layout_constraintEnd_toStartOf="@+id/uploadBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
 
@@ -96,7 +96,7 @@
         android:inputType="number|text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upload" />
+        app:layout_constraintTop_toBottomOf="@+id/uploadBtn" />
 
     <EditText
         android:id="@+id/comments"
