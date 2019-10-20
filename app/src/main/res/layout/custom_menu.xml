@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="19sp"
+                android:textSize="20sp"
                 android:layout_marginTop="50sp"
                 android:gravity="center"
                 android:text="reviews" />
@@ -52,8 +52,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="19sp"
-                android:layout_marginTop="18sp"
+                android:textSize="20sp"
+                android:layout_marginTop="25sp"
                 android:gravity="center"
                 android:text="groups" />
 
@@ -62,8 +62,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="19sp"
-                android:layout_marginTop="18sp"
+                android:textSize="20sp"
+                android:layout_marginTop="25sp"
                 android:gravity="center"
                 android:text="settings" />
 

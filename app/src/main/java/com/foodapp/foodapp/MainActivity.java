@@ -1,6 +1,7 @@
 package com.foodapp.foodapp;
 
 import android.app.SearchManager;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +18,10 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.foodapp.foodapp.ui.auth.login.ui.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -44,6 +48,20 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         getSupportActionBar().setTitle("Culinect");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimaryDark));
+
+        // Check if user is authenticated
+        checkAuth();
+    }
+
+    private void checkAuth() {
+        // Check if user has already signed in
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
+        }
     }
 
     @Override
