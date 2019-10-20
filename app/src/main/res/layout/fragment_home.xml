@@ -75,6 +75,7 @@
         app:layout_constraintTop_toBottomOf="@+id/groups_txt" />
 
     <Button
+        android:id="@+id/btnPublishReview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Review"

@@ -1,9 +1,11 @@
 package com.foodapp.foodapp.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -17,8 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.foodapp.foodapp.R;
 import com.foodapp.foodapp.adapters.GroupsAdapter;
 import com.foodapp.foodapp.adapters.NearbyAdapter;
+import com.foodapp.foodapp.helpers.Constants;
 import com.foodapp.foodapp.models.FoodItemModel;
 import com.foodapp.foodapp.models.GroupItemModel;
+import com.foodapp.foodapp.ui.review.ReviewActivity;
 
 import java.util.ArrayList;
 
@@ -35,6 +39,9 @@ public class HomeFragment extends Fragment {
     // Adapters
     private NearbyAdapter nearbyAdapter;
     private GroupsAdapter groupsAdapter;
+
+    // Buttons
+    private Button btnPublishReview;
 
     private int[] myImageList = new int[] {
             R.mipmap.ic_salmon_dish,
@@ -85,6 +92,15 @@ public class HomeFragment extends Fragment {
         groupsAdapter = new GroupsAdapter(getActivity(), groupItemModelArrayList);
         groupsRecyclerView.setAdapter(groupsAdapter);
         groupsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+
+        btnPublishReview = root.findViewById(R.id.btnPublishReview);
+        btnPublishReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent reviewIntent = new Intent(getActivity(), ReviewActivity.class);
+                startActivityForResult(reviewIntent, Constants.REVIEW_ACTIVITY_RETURN_CODE);
+            }
+        });
 
         homeViewModel.getText().observe(this, new Observer<String>() {
             @Override
