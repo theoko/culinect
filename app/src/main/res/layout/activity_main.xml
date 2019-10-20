@@ -24,7 +24,6 @@
             android:layout_height="match_parent">
 
 
-
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 
