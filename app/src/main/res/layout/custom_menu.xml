@@ -22,28 +22,40 @@
                 android:src="@drawable/ic_launcher_background" />
 
             <TextView
+                android:id="@+id/userDisplayName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Jessie Li"
                 android:textColor="@android:color/black"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:layout_marginTop="25sp"
                 android:gravity="center" />
 
             <TextView
+                android:id="@+id/localityTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Providence, RI"
+                android:text="N/A"
                 android:textSize="16sp"
                 android:gravity="center" />
+
+            <TextView
+                android:id="@+id/action_feed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:layout_marginTop="50sp"
+                android:gravity="center"
+                android:text="feed" />
 
             <TextView
                 android:id="@+id/action_reviews"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="19sp"
-                android:layout_marginTop="50sp"
+                android:textSize="20sp"
+                android:layout_marginTop="25sp"
                 android:gravity="center"
                 android:text="reviews" />
 
@@ -52,8 +64,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="19sp"
-                android:layout_marginTop="18sp"
+                android:textSize="20sp"
+                android:layout_marginTop="25sp"
                 android:gravity="center"
                 android:text="groups" />
 
@@ -62,10 +74,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="19sp"
-                android:layout_marginTop="18sp"
+                android:textSize="20sp"
+                android:layout_marginTop="25sp"
                 android:gravity="center"
                 android:text="settings" />
+
+            <TextView
+                android:id="@+id/action_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:layout_marginTop="25sp"
+                android:gravity="center"
+                android:text="logout" />
 
         </LinearLayout>
 

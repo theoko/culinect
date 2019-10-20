@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.MyViewHolder> {
     private LayoutInflater inflater;
     private ArrayList<GroupItemModel> imageModelArrayList;
+    public static int limit = 6;
 
     public GroupsAdapter(Context ctx, ArrayList<GroupItemModel> imageModelArrayList){
         inflater = LayoutInflater.from(ctx);
@@ -40,7 +41,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.MyViewHold
 
     @Override
     public int getItemCount() {
-        return imageModelArrayList.size();
+        if(imageModelArrayList.size() < limit) return imageModelArrayList.size(); else return limit;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
