@@ -25,7 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:ems="10"
         android:hint="Restaurant Name"
@@ -48,51 +47,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/restaurant" />
 
-    <RatingBar
-        android:id="@+id/ratingBar"
-        style="@android:style/Widget.Material.RatingBar"
-        android:layout_width="240dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="24dp"
-        android:theme="@style/RatingBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dish" />
-
-    <Button
-        android:id="@+id/uploadBtn"
-        android:layout_width="156dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorYellow"
-        android:text="Upload"
-        android:drawableStart="@drawable/ic_upload"
-        android:padding="10sp"
-        android:textColor="@color/iconsColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:text="Photos"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/uploadBtn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/uploadedImagesRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <EditText
         android:id="@+id/price"
@@ -105,43 +59,70 @@
         android:inputType="number|text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uploadBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/dish" />
 
-    <EditText
-        android:id="@+id/comments"
-        style="@style/Widget.AppCompat.EditText"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:gravity="top|left"
-        android:hint="Comments"
-        android:inputType="textMultiLine"
-        android:lines="6"
-        android:overScrollMode="always"
-        android:scrollbarStyle="insideInset"
-        android:scrollbars="vertical"
-        android:scrollHorizontally="false"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+    <RatingBar
+        android:id="@+id/ratingBar"
+        style="@android:style/Widget.Material.RatingBar"
+        android:layout_width="240dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:theme="@style/RatingBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/price" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:text="Photos"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/uploadedImagesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+
+    <Button
+        android:id="@+id/uploadBtn"
+        android:layout_width="156dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorYellow"
+        android:drawableStart="@drawable/ic_upload"
+        android:padding="10sp"
+        android:text="Upload"
+        android:textColor="@color/iconsColor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/uploadedImagesRecyclerView" />
 
     <Button
         android:id="@+id/review"
         android:layout_width="156dp"
         android:layout_height="75dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:background="@color/colorYellow"
-        android:textColor="@color/iconsColor"
         android:drawableStart="@drawable/ic_submit_review"
         android:padding="10sp"
         android:text="Submit"
+        android:textColor="@color/iconsColor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comments" />
+        app:layout_constraintTop_toBottomOf="@+id/uploadedImagesRecyclerView" />
     />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
