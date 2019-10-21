@@ -2,6 +2,7 @@ package com.foodapp.foodapp.ui.review;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,12 +17,16 @@ import static com.foodapp.foodapp.helpers.Constants.CAMERA_PIC_REQUEST;
 
 public class ReviewActivity extends AppCompatActivity {
 
+    private RecyclerView uploadedImagesRecyclerView;
+
     private Button uploadBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
+
+        uploadedImagesRecyclerView = findViewById(R.id.uploadedImagesRecyclerView);
 
         uploadBtn = findViewById(R.id.uploadBtn);
         uploadBtn.setOnClickListener(new View.OnClickListener() {
@@ -41,9 +46,11 @@ public class ReviewActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_PIC_REQUEST) {
-//            Bitmap image = (Bitmap) data.getExtras().get("data");
-//            ImageView imageview = (ImageView) findViewById(R.id.ImageView01); //sets imageview as the bitmap
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+//            ImageView imageview = findViewById(R.id.imgDish);
 //            imageview.setImageBitmap(image);
+
+            // Add image to horizontal RecyclerView
         }
     }
 }

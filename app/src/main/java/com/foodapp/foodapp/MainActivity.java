@@ -29,8 +29,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.foodapp.foodapp.ui.auth.login.ui.login.LoginActivity;
+import com.foodapp.foodapp.ui.groups.SendFragment;
 import com.foodapp.foodapp.ui.home.HomeFragment;
 import com.foodapp.foodapp.ui.reviews.GalleryFragment;
+import com.foodapp.foodapp.ui.settings.ShareFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -89,7 +91,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         action_groups.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                drawer.closeDrawer(GravityCompat.START);
+                Fragment groupsFragment = new SendFragment();
+                fragmentTransition(groupsFragment);
             }
         });
 
@@ -97,7 +101,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         action_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                drawer.closeDrawer(GravityCompat.START);
+                Fragment settingsFragment = new ShareFragment();
+                fragmentTransition(settingsFragment);
             }
         });
 
