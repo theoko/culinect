@@ -99,7 +99,7 @@
     <Button
         android:id="@+id/uploadBtn"
         android:layout_width="156dp"
-        android:layout_height="75dp"
+        android:layout_height="60dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:background="@color/colorYellow"
@@ -113,7 +113,7 @@
     <Button
         android:id="@+id/review"
         android:layout_width="156dp"
-        android:layout_height="75dp"
+        android:layout_height="60dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:background="@color/colorYellow"

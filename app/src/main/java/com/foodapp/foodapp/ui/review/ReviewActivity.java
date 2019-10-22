@@ -1,29 +1,50 @@
 package com.foodapp.foodapp.ui.review;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.Image;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-
 import com.foodapp.foodapp.R;
-import com.foodapp.foodapp.adapters.NearbyAdapter;
 import com.foodapp.foodapp.adapters.UploadedImageAdapter;
-import com.foodapp.foodapp.models.FoodItemModel;
 import com.foodapp.foodapp.models.ImageItemModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
+import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import static com.foodapp.foodapp.helpers.Constants.API_KEY;
 import static com.foodapp.foodapp.helpers.Constants.CAMERA_PIC_REQUEST;
+import static com.foodapp.foodapp.helpers.Constants.FOOD_PLACE_CONFIDENCE_LEVEL;
 
 public class ReviewActivity extends AppCompatActivity {
+
+    // Places API
+    private PlacesClient placesClient;
+
+    private EditText restaurantEditText;
 
     private ArrayList<ImageItemModel> imageItemModelArrayList;
     private RecyclerView uploadedImagesRecyclerView;
@@ -38,6 +59,8 @@ public class ReviewActivity extends AppCompatActivity {
 
 //        ImageView imageview = findViewById(R.id.imgDish);
 
+        restaurantEditText = findViewById(R.id.restaurant);
+
         uploadedImagesRecyclerView = findViewById(R.id.uploadedImagesRecyclerView);
 
         uploadBtn = findViewById(R.id.uploadBtn);
@@ -49,6 +72,122 @@ public class ReviewActivity extends AppCompatActivity {
         });
 
         initializePhotosList();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initializePlacesAPI();
+        findCurrentPlace();
+    }
+
+    private void initializePlacesAPI() {
+        // Initialize the SDK
+        Places.initialize(getApplicationContext(), API_KEY);
+
+        // Create a new Places client instance
+        placesClient = Places.createClient(this);
+    }
+
+    private void findCurrentPlace() {
+        ReviewActivity.this.setLoading(true);
+
+        FindCurrentPlaceRequest currentPlaceRequest =
+                FindCurrentPlaceRequest.newInstance(getPlaceFields());
+        Task<FindCurrentPlaceResponse> currentPlaceTask =
+                placesClient.findCurrentPlace(currentPlaceRequest);
+
+        currentPlaceTask.addOnSuccessListener(
+                new OnSuccessListener<FindCurrentPlaceResponse>() {
+                    @Override
+                    public void onSuccess(FindCurrentPlaceResponse response) {
+//                    responseView.setText(StringUtil.stringify(response, isDisplayRawResultsChecked()));
+                        List<PlaceLikelihood> placeLikelihoods = response.getPlaceLikelihoods();
+                        List<PlaceLikelihood> foodPlaceLikelihoods = new ArrayList<>();
+                        for (PlaceLikelihood placeLikelihood : placeLikelihoods) {
+                            List<Place.Type> types = placeLikelihood.getPlace().getTypes();
+                            for (Place.Type placeType : types) {
+                                if (
+                                    placeType == Place.Type.BAKERY ||
+                                    placeType == Place.Type.CAFE ||
+                                    placeType == Place.Type.RESTAURANT ||
+                                    placeType == Place.Type.FOOD
+                                ) {
+                                    foodPlaceLikelihoods.add(placeLikelihood);
+                                }
+                            }
+                        }
+
+                        for (PlaceLikelihood placeLikelihood : foodPlaceLikelihoods) {
+                            if (placeLikelihood.getLikelihood() > FOOD_PLACE_CONFIDENCE_LEVEL) {
+                                updateRestaurantName(placeLikelihood.getPlace().getName());
+                            }
+                            Log.e(ReviewActivity.this.getClass().getName(), "RESPONSE PLACE: " + placeLikelihood.getPlace().getName());
+                            Log.e(ReviewActivity.this.getClass().getName(), "RESPONSE LIKELIHOOD: " + placeLikelihood.getLikelihood());
+                        }
+                    }
+                }
+        );
+
+        currentPlaceTask.addOnFailureListener(
+                new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        exception.printStackTrace();
+//                    responseView.setText(exception.getMessage());
+                        Log.e(ReviewActivity.this.getClass().getName(), "RESPONSE EXCEPTION: " + exception.getMessage());
+                    }
+                });
+
+        currentPlaceTask.addOnCompleteListener(new OnCompleteListener<FindCurrentPlaceResponse>() {
+            @Override
+            public void onComplete(@NonNull Task<FindCurrentPlaceResponse> task) {
+                ReviewActivity.this.setLoading(false);
+            }
+        });
+    }
+
+    private void detectDish(Bitmap bitmap) {
+        // Detect food labels
+        final FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance()
+                .getCloudImageLabeler();
+
+        FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
+
+        labeler.processImage(firebaseVisionImage)
+                .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
+                    @Override
+                    public void onSuccess(List<FirebaseVisionImageLabel> labels) {
+                        // Task completed successfully
+                        for (FirebaseVisionImageLabel firebaseVisionImageLabel : labels) {
+                            Log.e(getClass().getName(), "Firebase vision image label: " + firebaseVisionImageLabel.getText());
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Task failed with an exception
+                        Log.e(getClass().getName(), "Firebase vision image label exception: " + e.getMessage());
+                    }
+                });
+    }
+
+    private void setLoading(boolean loading) {
+
+    }
+
+    private List<Place.Field> getPlaceFields() {
+        List<Place.Field> fieldList = new ArrayList<>();
+        fieldList.add(Place.Field.NAME);
+        fieldList.add(Place.Field.ADDRESS);
+        fieldList.add(Place.Field.LAT_LNG);
+        fieldList.add(Place.Field.TYPES);
+        return fieldList;
+    }
+
+    private void updateRestaurantName(String name) {
+        restaurantEditText.setText(name);
     }
 
     private void launchCamera() {
@@ -72,6 +211,7 @@ public class ReviewActivity extends AppCompatActivity {
         if (requestCode == CAMERA_PIC_REQUEST) {
             // Get image from camera
             Bitmap image = (Bitmap) data.getExtras().get("data");
+            detectDish(image);
             ImageItemModel imageItem = new ImageItemModel(image);
 
             // Add image to horizontal RecyclerView
