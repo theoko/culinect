@@ -37,6 +37,7 @@ import java.util.List;
 
 import static com.foodapp.foodapp.helpers.Constants.API_KEY;
 import static com.foodapp.foodapp.helpers.Constants.CAMERA_PIC_REQUEST;
+import static com.foodapp.foodapp.helpers.Constants.FOOD_ITEM_CONFIDENCE_LEVEL;
 import static com.foodapp.foodapp.helpers.Constants.FOOD_PLACE_CONFIDENCE_LEVEL;
 
 public class ReviewActivity extends AppCompatActivity {
@@ -45,6 +46,7 @@ public class ReviewActivity extends AppCompatActivity {
     private PlacesClient placesClient;
 
     private EditText restaurantEditText;
+    private EditText dishEditText;
 
     private ArrayList<ImageItemModel> imageItemModelArrayList;
     private RecyclerView uploadedImagesRecyclerView;
@@ -60,6 +62,7 @@ public class ReviewActivity extends AppCompatActivity {
 //        ImageView imageview = findViewById(R.id.imgDish);
 
         restaurantEditText = findViewById(R.id.restaurant);
+        dishEditText = findViewById(R.id.dish);
 
         uploadedImagesRecyclerView = findViewById(R.id.uploadedImagesRecyclerView);
 
@@ -159,8 +162,23 @@ public class ReviewActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(List<FirebaseVisionImageLabel> labels) {
                         // Task completed successfully
+                        FirebaseVisionImageLabel firebaseVisionImageLabelWithHighestConfidence = null;
                         for (FirebaseVisionImageLabel firebaseVisionImageLabel : labels) {
+                            // Check against confidence level
+                            if (firebaseVisionImageLabel.getConfidence() > FOOD_ITEM_CONFIDENCE_LEVEL) {
+                                firebaseVisionImageLabelWithHighestConfidence = firebaseVisionImageLabel;
+                            }
+                            if (firebaseVisionImageLabelWithHighestConfidence != null) {
+                                // Check if we have an item with higher confidence
+                                if (firebaseVisionImageLabelWithHighestConfidence.getConfidence() < firebaseVisionImageLabel.getConfidence()) {
+                                    firebaseVisionImageLabelWithHighestConfidence = firebaseVisionImageLabel;
+                                }
+                            }
                             Log.e(getClass().getName(), "Firebase vision image label: " + firebaseVisionImageLabel.getText());
+                        }
+
+                        if (firebaseVisionImageLabelWithHighestConfidence != null) {
+                            updateDishName(firebaseVisionImageLabelWithHighestConfidence.getText());
                         }
                     }
                 })
@@ -188,6 +206,10 @@ public class ReviewActivity extends AppCompatActivity {
 
     private void updateRestaurantName(String name) {
         restaurantEditText.setText(name);
+    }
+
+    private void updateDishName(String name) {
+        dishEditText.setText(name);
     }
 
     private void launchCamera() {

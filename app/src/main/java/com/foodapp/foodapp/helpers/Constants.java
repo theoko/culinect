@@ -8,4 +8,5 @@ public class Constants {
 
     // Set to 0.1 for testing purposes
     public static double FOOD_PLACE_CONFIDENCE_LEVEL = 0.1;
+    public static double FOOD_ITEM_CONFIDENCE_LEVEL = 0.7;
 }
