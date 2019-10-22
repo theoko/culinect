@@ -16,16 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.foodapp.foodapp.R;
 import com.foodapp.foodapp.adapters.UploadedImageAdapter;
+import com.foodapp.foodapp.api.response.PlaceResponse;
 import com.foodapp.foodapp.models.ImageItemModel;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
@@ -34,11 +30,11 @@ import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.foodapp.foodapp.helpers.Constants.API_KEY;
 import static com.foodapp.foodapp.helpers.Constants.CAMERA_PIC_REQUEST;
 import static com.foodapp.foodapp.helpers.Constants.FOOD_ITEM_CONFIDENCE_LEVEL;
-import static com.foodapp.foodapp.helpers.Constants.FOOD_PLACE_CONFIDENCE_LEVEL;
 
 public class ReviewActivity extends AppCompatActivity {
 
@@ -58,8 +54,6 @@ public class ReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
-
-//        ImageView imageview = findViewById(R.id.imgDish);
 
         restaurantEditText = findViewById(R.id.restaurant);
         dishEditText = findViewById(R.id.dish);
@@ -95,57 +89,20 @@ public class ReviewActivity extends AppCompatActivity {
     private void findCurrentPlace() {
         ReviewActivity.this.setLoading(true);
 
-        FindCurrentPlaceRequest currentPlaceRequest =
-                FindCurrentPlaceRequest.newInstance(getPlaceFields());
-        Task<FindCurrentPlaceResponse> currentPlaceTask =
-                placesClient.findCurrentPlace(currentPlaceRequest);
-
-        currentPlaceTask.addOnSuccessListener(
-                new OnSuccessListener<FindCurrentPlaceResponse>() {
-                    @Override
-                    public void onSuccess(FindCurrentPlaceResponse response) {
-//                    responseView.setText(StringUtil.stringify(response, isDisplayRawResultsChecked()));
-                        List<PlaceLikelihood> placeLikelihoods = response.getPlaceLikelihoods();
-                        List<PlaceLikelihood> foodPlaceLikelihoods = new ArrayList<>();
-                        for (PlaceLikelihood placeLikelihood : placeLikelihoods) {
-                            List<Place.Type> types = placeLikelihood.getPlace().getTypes();
-                            for (Place.Type placeType : types) {
-                                if (
-                                    placeType == Place.Type.BAKERY ||
-                                    placeType == Place.Type.CAFE ||
-                                    placeType == Place.Type.RESTAURANT ||
-                                    placeType == Place.Type.FOOD
-                                ) {
-                                    foodPlaceLikelihoods.add(placeLikelihood);
-                                }
-                            }
-                        }
-
-                        for (PlaceLikelihood placeLikelihood : foodPlaceLikelihoods) {
-                            if (placeLikelihood.getLikelihood() > FOOD_PLACE_CONFIDENCE_LEVEL) {
-                                updateRestaurantName(placeLikelihood.getPlace().getName());
-                            }
-                            Log.e(ReviewActivity.this.getClass().getName(), "RESPONSE PLACE: " + placeLikelihood.getPlace().getName());
-                            Log.e(ReviewActivity.this.getClass().getName(), "RESPONSE LIKELIHOOD: " + placeLikelihood.getLikelihood());
-                        }
-                    }
-                }
-        );
-
-        currentPlaceTask.addOnFailureListener(
-                new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        exception.printStackTrace();
-//                    responseView.setText(exception.getMessage());
-                        Log.e(ReviewActivity.this.getClass().getName(), "RESPONSE EXCEPTION: " + exception.getMessage());
-                    }
-                });
-
-        currentPlaceTask.addOnCompleteListener(new OnCompleteListener<FindCurrentPlaceResponse>() {
+        com.foodapp.foodapp.api.Place.findCurrentPlace(ReviewActivity.this, placesClient, new PlaceResponse() {
             @Override
-            public void onComplete(@NonNull Task<FindCurrentPlaceResponse> task) {
+            public void post(String name) {
+                updateRestaurantName(name);
+            }
+
+            @Override
+            public void onComplete() {
                 ReviewActivity.this.setLoading(false);
+            }
+
+            @Override
+            public void fail(Exception exception) {
+                Log.e(getClass().getName(), Objects.requireNonNull(exception.getMessage()));
             }
         });
     }

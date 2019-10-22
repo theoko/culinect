@@ -7,6 +7,6 @@ public class Constants {
     public static String API_KEY = "AIzaSyDwH_zuuMFZt9ZHM2fVNhjW-Ux52rVVC5M";
 
     // Set to 0.1 for testing purposes
-    public static double FOOD_PLACE_CONFIDENCE_LEVEL = 0.1;
+    public static double FOOD_PLACE_CONFIDENCE_LEVEL = 0.01;
     public static double FOOD_ITEM_CONFIDENCE_LEVEL = 0.7;
 }

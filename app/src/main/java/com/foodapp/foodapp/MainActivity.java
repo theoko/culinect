@@ -1,9 +1,12 @@
 package com.foodapp.foodapp;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -11,6 +14,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -28,6 +32,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.foodapp.foodapp.services.PlaceSearchService;
 import com.foodapp.foodapp.ui.auth.login.ui.login.LoginActivity;
 import com.foodapp.foodapp.ui.groups.SendFragment;
 import com.foodapp.foodapp.ui.home.HomeFragment;
@@ -185,6 +190,23 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    private void startPlaceSearchService() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!prefs.getBoolean("firstTime", false)) {
+            // mark first time has ran.
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("firstTime", true);
+            editor.apply();
+
+            // Schedule search for nearest places and ask user to create a review
+            AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(MainActivity.this, PlaceSearchService.class);
+            PendingIntent pi = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
+            am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (1000 * 60 * 5), pi);
         }
     }
 
