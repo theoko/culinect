@@ -18,7 +18,6 @@ public class UploadedImageAdapter extends RecyclerView.Adapter<UploadedImageAdap
     private ArrayList<ImageItemModel> imageModelArrayList;
 
     public UploadedImageAdapter(Context ctx, ArrayList<ImageItemModel> imageModelArrayList) {
-
         inflater = LayoutInflater.from(ctx);
         this.imageModelArrayList = imageModelArrayList;
     }
@@ -42,7 +41,6 @@ public class UploadedImageAdapter extends RecyclerView.Adapter<UploadedImageAdap
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-
         ImageView iv;
 
         public MyViewHolder(View itemView) {

@@ -1,12 +1,12 @@
 package com.foodapp.foodapp;
 
-import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -14,15 +14,17 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -34,6 +36,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.foodapp.foodapp.services.PlaceSearchService;
 import com.foodapp.foodapp.ui.auth.login.ui.login.LoginActivity;
+import com.foodapp.foodapp.ui.dish.DishFragment;
 import com.foodapp.foodapp.ui.groups.SendFragment;
 import com.foodapp.foodapp.ui.home.HomeFragment;
 import com.foodapp.foodapp.ui.reviews.GalleryFragment;
@@ -45,6 +48,9 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -141,7 +147,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     protected void onResume() {
         super.onResume();
-        updateLocation();
+        if (checkPermission(ACCESS_FINE_LOCATION) && checkPermission(ACCESS_COARSE_LOCATION)) {
+            updateLocation();
+        }
+        startPlaceSearchService();
     }
 
     private void checkAuth() {
@@ -160,20 +169,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
+    @RequiresPermission(allOf = {ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION})
     private void updateLocation() {
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    Activity#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for Activity#requestPermissions for more details.
-                return;
-            }
-        }
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         double longitude = location.getLongitude();
         double latitude = location.getLatitude();
@@ -195,20 +193,40 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
 
     private void startPlaceSearchService() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!prefs.getBoolean("firstTime", false)) {
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//        if (!prefs.getBoolean("firstTime", false)) {
             // mark first time has ran.
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean("firstTime", true);
-            editor.apply();
+//            SharedPreferences.Editor editor = prefs.edit();
+//            editor.putBoolean("firstTime", true);
+//            editor.apply();
 
             // Schedule search for nearest places and ask user to create a review
             AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(MainActivity.this, PlaceSearchService.class);
             PendingIntent pi = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
-            am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (1000 * 60 * 5), pi);
-        }
+//            am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (1000 * 60 * 5), pi);
+            am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pi);
+//        }
+
+        // Debug service
+        Intent service = new Intent(this, PlaceSearchService.class);
+        startService(service);
     }
+
+    /* private void registerReceiverForNearbyFoodItemClickEvents() {
+        BroadcastReceiver nearbyFootItemOnClickListener = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String broadcast = intent.getAction();
+                if (broadcast.equalsIgnoreCase("com.foodapp.foodapp.adapters.NearbyAdapter")) {
+
+                }
+            }
+        };
+
+        IntentFilter filter = new IntentFilter("com.foodapp.foodapp.adapters.NearbyAdapter");
+        registerReceiver(nearbyFootItemOnClickListener, filter);
+    }*/
 
     private void fragmentTransition(Fragment someFragment) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT);
@@ -252,7 +270,24 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         return false;
     }
 
+    private boolean checkPermission(String permission) {
+        boolean hasPermission =
+                ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(this, new String[]{permission}, 0);
+        }
+        return hasPermission;
+    }
+
     public void onClick_review(View view) {
         Log.d(getClass().getName(), "Clicked on review!");
+    }
+
+    public void onClick_foodItem(View view) {
+        TextView textView = view.findViewById(R.id.dishTitle);
+        Log.e(getClass().getName(), "clicked on: " + textView.getText().toString());
+
+        Fragment dishDetailsFragment = new DishFragment();
+        fragmentTransition(dishDetailsFragment);
     }
 }
